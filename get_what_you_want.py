@@ -19,9 +19,9 @@ if __name__ == '__main__':
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"
     }
+    session = requests.session()
 
-    resp = requests.get(url, headers=headers)
-    resp.close()
+    resp = session.get(url, headers=headers)
 
     page = BeautifulSoup(resp.text, 'html.parser')
     as_ = page.find_all('a', attrs={'class': 'iusc'})
@@ -37,7 +37,6 @@ if __name__ == '__main__':
         murl = all_attrs[4][5:]
         try:
             resp = requests.get(murl, headers=headers)
-            resp.close()
             img_name = 'img_' + str(i) + '.jpg'
             file = open(os.path.join(args.save_path, img_name), 'wb')
             file.write(resp.content)
@@ -48,3 +47,5 @@ if __name__ == '__main__':
             print('有些图片无法下载')
         time.sleep(0.5)
     print('下载完成!')
+
+    session.close()
